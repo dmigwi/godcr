@@ -6,3 +6,4 @@ _*
 *.coverprofile
 **/.godcr_test*
 pkged.go
+/vendor

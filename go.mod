@@ -30,12 +30,16 @@ require (
 	gioui.org/cpu v0.0.0-20210817075930-8d6a761490d2 // indirect
 	gioui.org/shader v1.0.6 // indirect
 	github.com/AndreasBriese/bbloom v0.0.0-20190825152654-46b345b51c96 // indirect
+	github.com/DataDog/zstd v1.5.2 // indirect
 	github.com/aead/siphash v1.0.1 // indirect
 	github.com/agl/ed25519 v0.0.0-20170116200512-5312a6153412 // indirect
 	github.com/andybalholm/cascadia v1.1.0 // indirect
 	github.com/asdine/storm v0.0.0-20190216191021-fe89819f6282 // indirect
 	github.com/benoitkugler/textlayout v0.1.1 // indirect
-	github.com/btcsuite/btcd v0.22.0-beta.0.20211026140004-31791ba4dc6e // indirect
+	github.com/btcsuite/btcd v0.22.1 // indirect
+	github.com/btcsuite/btcd/btcec/v2 v2.1.1 // indirect
+	github.com/btcsuite/btcd/btcutil v1.1.1 // indirect
+	github.com/btcsuite/btcd/chaincfg/chainhash v1.0.1 // indirect
 	github.com/btcsuite/btclog v0.0.0-20170628155309-84c8d2346e9f // indirect
 	github.com/btcsuite/btcutil v1.0.3-0.20210527170813-e2ba6805a890 // indirect
 	github.com/btcsuite/btcutil/psbt v1.0.3-0.20201208143702-a53e38424cce // indirect
@@ -137,4 +141,7 @@ require (
 // and dcrdex (v1.10.3) but only v1.10.4 and above can be compiled for
 // the android OS using gomobile. This replace can be removed once any
 // of those projects update their github.com/lib/pq dependency.
-replace github.com/lib/pq => github.com/lib/pq v1.10.4
+replace (
+	github.com/lib/pq => github.com/lib/pq v1.10.4
+	github.com/planetdecred/dcrlibwallet => github.com/song50119/dcrlibwallet v1.7.1-0.20220818100055-9f88b16bcd0e
+)
