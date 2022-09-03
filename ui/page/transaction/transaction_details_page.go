@@ -738,7 +738,7 @@ func (pg *TxDetailsPage) pageSections(gtx layout.Context, body layout.Widget) la
 func (pg *TxDetailsPage) HandleUserInteractions() {
 	for pg.toDcrdata.Clicked() {
 		redirectURL := pg.WL.Wallet.GetBlockExplorerURL(pg.transaction.Hash)
-		info := modal.NewInfoModal(pg.Load).
+		info := modal.NewCustomModal(pg.Load).
 			Title("View on Dcrdata").
 			Body("Copy and paste the link below in your browser, to view transaction on dcrdata dashboard.").
 			SetCancelable(true).
@@ -781,9 +781,7 @@ func (pg *TxDetailsPage) HandleUserInteractions() {
 					}),
 				)
 			}).
-			PositiveButton("Got it", func(isChecked bool) bool {
-				return true
-			})
+			PositiveButton("Got it", modal.DefaultClickFunc())
 		pg.ParentWindow().ShowModal(info)
 	}
 
@@ -802,9 +800,7 @@ func (pg *TxDetailsPage) HandleUserInteractions() {
 			pg.rebroadcastClickable.SetEnabled(false, nil)
 			if !pg.Load.WL.MultiWallet.IsConnectedToDecredNetwork() {
 				// if user is not conected to the network, notify the user
-				errModal := modal.NewErrorModal(pg.Load, values.String(values.StrNotConnected), func(isChecked bool) bool {
-					return true
-				})
+				errModal := modal.NewErrorModal(pg.Load, values.String(values.StrNotConnected), modal.DefaultClickFunc())
 				pg.ParentWindow().ShowModal(errModal)
 				if !pg.rebroadcastClickable.Enabled() {
 					pg.rebroadcastClickable.SetEnabled(true, nil)
@@ -815,14 +811,10 @@ func (pg *TxDetailsPage) HandleUserInteractions() {
 			err := pg.wallet.PublishUnminedTransactions()
 			if err != nil {
 				// If transactions are not published, notify the user
-				errModal := modal.NewErrorModal(pg.Load, err.Error(), func(isChecked bool) bool {
-					return true
-				})
+				errModal := modal.NewErrorModal(pg.Load, err.Error(), modal.DefaultClickFunc())
 				pg.ParentWindow().ShowModal(errModal)
 			} else {
-				infoModal := modal.NewSuccessModal(pg.Load, values.String(values.StrRepublished), func(isChecked bool) bool {
-					return true
-				})
+				infoModal := modal.NewSuccessModal(pg.Load, values.String(values.StrRepublished), modal.DefaultClickFunc())
 				pg.ParentWindow().ShowModal(infoModal)
 			}
 			if !pg.rebroadcastClickable.Enabled() {

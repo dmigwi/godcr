@@ -61,9 +61,7 @@ func (ds *DexServerSelector) isLoadingDexClient() bool {
 func (ds *DexServerSelector) startDexClient() {
 	_, err := ds.WL.MultiWallet.StartDexClient()
 	if err != nil {
-		errModal := modal.NewErrorModal(ds.Load, err.Error(), func(isChecked bool) bool {
-			return true
-		})
+		errModal := modal.NewErrorModal(ds.Load, err.Error(), modal.DefaultClickFunc())
 		ds.ParentWindow().ShowModal(errModal)
 		return
 	}
@@ -72,9 +70,7 @@ func (ds *DexServerSelector) startDexClient() {
 	if !ds.Dexc().Initialized() {
 		err = ds.Dexc().InitializeWithPassword([]byte(values.DEXClientPass))
 		if err != nil {
-			errModal := modal.NewErrorModal(ds.Load, err.Error(), func(isChecked bool) bool {
-				return true
-			})
+			errModal := modal.NewErrorModal(ds.Load, err.Error(),modal.DefaultClickFunc())
 			ds.ParentWindow().ShowModal(errModal)
 			return
 		}
@@ -83,9 +79,7 @@ func (ds *DexServerSelector) startDexClient() {
 	if !ds.Dexc().IsLoggedIn() {
 		err := ds.Dexc().Login([]byte(values.DEXClientPass))
 		if err != nil {
-			errModal := modal.NewErrorModal(ds.Load, err.Error(), func(isChecked bool) bool {
-				return true
-			})
+			errModal := modal.NewErrorModal(ds.Load, err.Error(), modal.DefaultClickFunc())
 			ds.ParentWindow().ShowModal(errModal)
 			return
 		}

@@ -512,14 +512,10 @@ func (mp *MainPage) HandleUserInteractions() {
 				if mp.WL.MultiWallet.IsSynced() {
 					mp.Display(pg)
 				} else if mp.WL.MultiWallet.IsSyncing() {
-					errModal := modal.NewErrorModal(mp.Load, values.String(values.StrNotConnected), func(isChecked bool) bool {
-						return true
-					})
+					errModal := modal.NewErrorModal(mp.Load, values.String(values.StrNotConnected), modal.DefaultClickFunc())
 					mp.ParentWindow().ShowModal(errModal)
 				} else {
-					errModal := modal.NewErrorModal(mp.Load, values.String(values.StrWalletSyncing), func(isChecked bool) bool {
-						return true
-					})
+					errModal := modal.NewErrorModal(mp.Load, values.String(values.StrWalletSyncing), modal.DefaultClickFunc())
 					mp.ParentWindow().ShowModal(errModal)
 				}
 			} else {
@@ -573,14 +569,10 @@ func (mp *MainPage) HandleUserInteractions() {
 			if mp.WL.MultiWallet.IsSynced() {
 				mp.Display(pg)
 			} else if mp.WL.MultiWallet.IsSyncing() {
-				errModal := modal.NewErrorModal(mp.Load, values.String(values.StrWalletSyncing), func(isChecked bool) bool {
-					return true
-				})
+				errModal := modal.NewErrorModal(mp.Load, values.String(values.StrWalletSyncing), modal.DefaultClickFunc())
 				mp.ParentWindow().ShowModal(errModal)
 			} else {
-				errModal := modal.NewErrorModal(mp.Load, values.String(values.StrNotConnected), func(isChecked bool) bool {
-					return true
-				})
+				errModal := modal.NewErrorModal(mp.Load, values.String(values.StrNotConnected), modal.DefaultClickFunc())
 				mp.ParentWindow().ShowModal(errModal)
 			}
 		}
@@ -998,7 +990,7 @@ func (mp *MainPage) listenForNotifications() {
 }
 
 func (mp *MainPage) showBackupInfo() {
-	backupNowOrLaterModal := modal.NewInfoModal(mp.Load).
+	backupNowOrLaterModal := modal.NewCustomModal(mp.Load).
 		SetupWithTemplate(modal.WalletBackupInfoTemplate).
 		SetCancelable(false).
 		SetContentAlignment(layout.W, layout.Center).

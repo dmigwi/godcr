@@ -161,9 +161,7 @@ func (vm *voteModal) sendVotes() {
 					return
 				}
 				pm.Dismiss()
-				infoModal := modal.NewSuccessModal(vm.Load, values.String(values.StrVoteSent), func(isChecked bool) bool {
-					return true
-				})
+				infoModal := modal.NewSuccessModal(vm.Load, values.String(values.StrVoteSent), modal.DefaultClickFunc())
 				vm.ParentWindow().ShowModal(infoModal)
 				go vm.WL.MultiWallet.Politeia.Sync()
 				vm.Dismiss()

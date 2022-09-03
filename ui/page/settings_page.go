@@ -335,7 +335,7 @@ func (pg *SettingsPage) lineSeparator() layout.Widget {
 }
 
 func (pg *SettingsPage) showWarningModalDialog(title, msg, key string) {
-	info := modal.NewInfoModal(pg.Load).
+	info := modal.NewCustomModal(pg.Load).
 		Title(title).
 		Body(msg).
 		NegativeButton(values.String(values.StrCancel), func() {}).
@@ -384,29 +384,28 @@ func (pg *SettingsPage) HandleUserInteractions() {
 		pg.WL.MultiWallet.SaveUserConfigValue(load.DarkModeConfigKey, pg.isDarkModeOn)
 		pg.RefreshTheme(pg.ParentWindow())
 	}
+
 	if pg.transactionNotification.Changed() {
 		go func() {
 			pg.WL.MultiWallet.SaveUserConfigValue(load.TransactionNotificationConfigKey, pg.transactionNotification.IsChecked())
 		}()
-		infoModal := modal.NewSuccessModal(pg.Load, values.StringF(values.StrTxNotification, values.String(values.StrDisabled)), func(isChecked bool) bool {
-			return true
-		})
+
+		strTitle := values.String(values.StrDisabled)
 		if pg.transactionNotification.IsChecked() {
-			infoModal = modal.NewSuccessModal(pg.Load, values.StringF(values.StrTxNotification, values.String(values.StrEnabled)), func(isChecked bool) bool {
-				return true
-			})
+			strTitle = values.String(values.StrEnabled)
 		}
+
+		infoModal := modal.NewSuccessModal(pg.Load, values.StringF(values.StrTxNotification, strTitle),
+			modal.DefaultClickFunc())
 		pg.ParentWindow().ShowModal(infoModal)
 	}
 
 	if pg.infoButton.Button.Clicked() {
-		info := modal.NewInfoModal2(pg.Load).
+		info := modal.NewCustomModal(pg.Load).
 			SetContentAlignment(layout.Center, layout.Center).
 			Body(values.String(values.StrStartupPasswordInfo)).
 			PositiveButtonWidth(values.MarginPadding100).
-			PositiveButton(values.String(values.StrOk), func(isChecked bool) bool {
-				return true
-			})
+			PositiveButton(values.String(values.StrOk), modal.DefaultClickFunc())
 		pg.ParentWindow().ShowModal(info)
 	}
 
@@ -521,28 +520,17 @@ func (pg *SettingsPage) HandleUserInteractions() {
 	select {
 	case err := <-pg.errorReceiver:
 		erro := err.Error()
-		if err.Error() == dcrlibwallet.ErrInvalidPassphrase {
+		if erro == dcrlibwallet.ErrInvalidPassphrase {
 			erro = values.String(values.StrInvalidPassphrase)
 		}
-		infoModal := modal.NewErrorModal(pg.Load, erro, func(isChecked bool) bool {
-			return true
-		})
+		infoModal := modal.NewErrorModal(pg.Load, erro, modal.DefaultClickFunc())
 		pg.ParentWindow().ShowModal(infoModal)
 	default:
 	}
 }
 
 func (pg *SettingsPage) showNoticeSuccess(title string) {
-	icon := decredmaterial.NewIcon(pg.Theme.Icons.ActionCheckCircle)
-	icon.Color = pg.Theme.Color.Green500
-	info := modal.NewInfoModal2(pg.Load).
-		SetContentAlignment(layout.Center, layout.Center).
-		Title(title).
-		Icon(icon).
-		PositiveButtonWidth(values.MarginPadding100).
-		PositiveButton(values.String(values.StrOk), func(isChecked bool) bool {
-			return true
-		})
+	info := modal.NewSuccessModal(pg.Load, title, modal.DefaultClickFunc())
 	pg.ParentWindow().ShowModal(info)
 }
 

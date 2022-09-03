@@ -124,7 +124,7 @@ func (ws *WalletSelector) loadBadWallets() {
 }
 
 func (ws *WalletSelector) deleteBadWallet(badWalletID int) {
-	warningModal := modal.NewInfoModal(ws.Load).
+	warningModal := modal.NewCustomModal(ws.Load).
 		Title(values.String(values.StrRemoveWallet)).
 		Body(values.String(values.StrWalletRestoreMsg)).
 		NegativeButton(values.String(values.StrCancel), func() {}).
@@ -133,15 +133,11 @@ func (ws *WalletSelector) deleteBadWallet(badWalletID int) {
 			go func() {
 				err := ws.WL.MultiWallet.DeleteBadWallet(badWalletID)
 				if err != nil {
-					errorModal := modal.NewErrorModal(ws.Load, err.Error(), func(isChecked bool) bool {
-						return true
-					})
+					errorModal := modal.NewErrorModal(ws.Load, err.Error(), modal.DefaultClickFunc())
 					ws.ParentWindow().ShowModal(errorModal)
 					return
 				}
-				infoModal := modal.NewSuccessModal(ws.Load, values.String(values.StrWalletRemoved), func(isChecked bool) bool {
-					return true
-				})
+				infoModal := modal.NewSuccessModal(ws.Load, values.String(values.StrWalletRemoved), modal.DefaultClickFunc())
 				ws.ParentWindow().ShowModal(infoModal)
 				ws.loadBadWallets() // refresh bad wallets list
 				ws.ParentWindow().Reload()
